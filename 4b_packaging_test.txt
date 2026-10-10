@@ -1,0 +1,5 @@
+Working directory: /home/project/final_project
+Python shell: /home/project/rag_env/bin/python
+>>> from EmotionDetection.emotion_detection import emotion_detector
+>>> print(emotion_detector('I am so angry about this.'))
+{'anger': 0.97330016, 'disgust': 0.007892619, 'fear': 0.0212821, 'joy': 0.011611545, 'sadness': 0.04773834, 'dominant_emotion': 'anger'}

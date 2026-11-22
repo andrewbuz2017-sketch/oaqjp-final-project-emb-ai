@@ -135,6 +135,8 @@ for _,r in geo.iterrows():
  folium.Marker([r.Lat,r.Long],popup=str(r["Launch Site"])+" / outcome "+str(r["class"]),icon=folium.Icon(color="green" if r["class"]==1 else "red",icon="info-sign")).add_to(cluster)
 MousePosition().add_to(m);folium.LayerControl().add_to(m)
 m.save(str(OUT/"launch_map.html"))
+m.location=[28.57325457,-80.64689529];m.options["zoom"]=14
+m.save(str(OUT/"launch_records_map.html"))
 # Coordinates for proximity are explicit representative points, not an authoritative nearest-feature GIS query.
 from math import radians,sin,cos,atan2,sqrt
 def distance(a,b):

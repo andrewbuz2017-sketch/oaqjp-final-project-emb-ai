@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import plotly.express as px
 from dash import Dash,dcc,html,Input,Output
-from flask import send_file
+from flask import send_file,request
 DATA=Path(__file__).parent/"spacex_output"
 geo=pd.read_csv(DATA/"spacex_launch_geo.csv")
 geo["Booster Version Category"]=geo["Booster Version"].str.extract(r"F9\s+([^\s]+)",expand=False).fillna("Unknown")
@@ -32,12 +32,12 @@ app.layout=html.Div([
  dcc.RangeSlider(id="mass",min=0,max=10000,step=500,value=[0,10000],marks={i:str(i) for i in range(0,10001,2000)}),
  html.Div([dcc.Graph(id="pie"),dcc.Graph(id="scatter")],style={"display":"grid","gridTemplateColumns":"1fr 1fr"}),
  html.P("The all-site pie shows shares of successful launches. A selected-site pie shows that site's success and failure counts."),
- html.A("Launch map",href=external_prefix+"map"),html.Span(" / "),html.A("Proximity map",href=external_prefix+"proximity")
+ html.A("Launch map",href=external_prefix+"map"),html.Span(" / "),html.A("Launch records",href=external_prefix+"map?view=records"),html.Span(" / "),html.A("Proximity map",href=external_prefix+"proximity")
 ],style={"fontFamily":"Arial","margin":"25px","color":"#17364F"})
 @app.callback(Output("pie","figure"),Output("scatter","figure"),Input("site","value"),Input("mass","value"))
 def update(site,mass):return pie(site,mass),scatter(site,mass)
 @app.server.route("/map")
-def map_view():return send_file(DATA/"launch_map.html")
+def map_view():return send_file(DATA/("launch_records_map.html" if request.args.get("view")=="records" else "launch_map.html"))
 @app.server.route("/proximity")
 def proximity_view():return send_file(DATA/"proximity_map.html")
 if __name__=="__main__":app.run(host="0.0.0.0",port=8050,debug=False)
